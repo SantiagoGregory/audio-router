@@ -6,7 +6,7 @@ I apologise if you encounter any bugs while using this program. Any that existed
 
 I do not yet have any changelog at the moment, I plan to add one, but i will do that after a few days of tweaking and cleaning up the code. If you want to see a semi-alternative changelog, just check the commit history inside the develop branch. You can also download a build of the develop branch using appveyor below
 
-[![Build status](https://ci.appveyor.com/api/projects/status/kdk2mexxolw3mpo9?svg=true)](https://ci.appveyor.com/project/wolfreak99/audio-router)
+[![Build status](https://ci.appveyor.com/api/projects/status/kdk2mexxolw3mpo9?svg=true)](https://ci.appveyor.com/project/wolfreak99/audio-router) (need to change build status to my project)
 
 For now, the main visible difference between this fork and the original is a system tray icon included.
 
