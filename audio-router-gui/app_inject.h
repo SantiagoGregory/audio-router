@@ -17,7 +17,7 @@
  */
 enum APP_INJECT_DLL_FLAG
 {
-    APP_INJECT_DLL_FLAG_AUDIO_ROUTER_EXPLICITLY_LOADED,                 /**> Enum value Audio Roter Explicitly Loaded */
+    APP_INJECT_DLL_FLAG_AUDIO_ROUTER_EXPLICITLY_LOADED,                 /**> Enum value Audio Router Explicitly Loaded */
     APP_INJECT_DLL_FLAG_BOOTSTRAPPER_AUDIO_ROUTER_IMPLICITLY_LOADED,    /**> Enum value Bootstrapper Audio Router Implicitly Loaded */
     APP_INJECT_DLL_FLAG_BOOTSTRAPPER_IMPLICITLY_LOADED,                 /**> Enum value Bootstrapper Implicitly Loaded*/
     APP_INJECT_DLL_FLAG_BOOTSTRAPPER_EXPLICITLY_LOADED,                 /**> Enum value Bootstrapper Explicity Loaded */
