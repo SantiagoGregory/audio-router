@@ -17,10 +17,10 @@
  */
 enum APP_INJECT_DLL_FLAG
 {
-    APP_INJECT_DLL_FLAG_AUDIO_ROUTER_EXPLICITLY_LOADED,                 /**> Enum value Audio Router Explicitly Loaded */
-    APP_INJECT_DLL_FLAG_BOOTSTRAPPER_AUDIO_ROUTER_IMPLICITLY_LOADED,    /**> Enum value Bootstrapper Audio Router Implicitly Loaded */
-    APP_INJECT_DLL_FLAG_BOOTSTRAPPER_IMPLICITLY_LOADED,                 /**> Enum value Bootstrapper Implicitly Loaded*/
-    APP_INJECT_DLL_FLAG_BOOTSTRAPPER_EXPLICITLY_LOADED,                 /**> Enum value Bootstrapper Explicity Loaded */
+    APP_INJECT_DLL_FLAG_AUDIO_ROUTER_EXPLICITLY_LOADED,                 /**< Enum value Audio Router Explicitly Loaded */
+    APP_INJECT_DLL_FLAG_BOOTSTRAPPER_AUDIO_ROUTER_IMPLICITLY_LOADED,    /**< Enum value Bootstrapper Audio Router Implicitly Loaded */
+    APP_INJECT_DLL_FLAG_BOOTSTRAPPER_IMPLICITLY_LOADED,                 /**< Enum value Bootstrapper Implicitly Loaded*/
+    APP_INJECT_DLL_FLAG_BOOTSTRAPPER_EXPLICITLY_LOADED,                 /**< Enum value Bootstrapper Explicity Loaded */
 };
 // TODO/audiorouterdev: change the order of parameters in inject dll
 
@@ -31,7 +31,7 @@ enum APP_INJECT_DLL_FLAG
 class app_inject {
 public:
 
-    typedef std::vector<IMMDevice *> devices_t;     /**> Vector Devices_t and its type is IMMDevice  */
+    typedef std::vector<IMMDevice *> devices_t;     /**< Vector Devices_t and its type is IMMDevice  */
     /**
      * An enum type
      * flush_t indicates the assignements of Soft, Hard and None.
@@ -82,7 +82,7 @@ private:
 
 public:
 
-    std::vector<std::wstring> device_names; /**> A Vector and it's type is wstring*/
+    std::vector<std::wstring> device_names; /**< A Vector and it's type is wstring*/
 
     /** A constructor
      * Only initated every once when Class Object is created.

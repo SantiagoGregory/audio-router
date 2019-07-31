@@ -2,6 +2,7 @@
 #include < Psapi.h >
 #include < algorithm >
 
+
 bool app_list::populate_list(bool x86, const filters_t& filters)
 {
     DWORD processes[1024], needed;
@@ -49,6 +50,13 @@ bool app_list::populate_list(const filters_t& filters)
 #endif
 }
 
+/** Get architecture information of the current device
+    @param app_info
+    @param filters
+    @param architecture type (true for x86, false x64)
+    @param query_name
+
+*/
 bool app_list::get_app_info(app_info& info, const filters_t& filters, bool x86, bool query_name)
 {
     HMODULE hmodules[1024];

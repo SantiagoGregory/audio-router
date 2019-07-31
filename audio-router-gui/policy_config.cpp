@@ -8,6 +8,10 @@
 
 extern HANDLE audio_router_mutex;
 
+
+/** Sets default audio playback device
+ * @param devID developer ID used for endpoint setting
+ */
 HRESULT SetDefaultAudioPlaybackDevice(LPCWSTR devID)
 {
     IPolicyConfigVista *pPolicyConfig;
@@ -80,6 +84,9 @@ template <typename T, typename U> bool reset_all_device_formats()
     return !ret;
 } // reset_all_device_formats
 
+/** Returns true if device is running Windows 10 or higher
+    @return is running windows 10
+ */
 bool iswin10orgreater()
 {
     LPSERVER_INFO_101 pBuf = NULL;
@@ -93,6 +100,9 @@ bool iswin10orgreater()
     return true;
 }
 
+/** Resets devices list
+ * @param hard_reset whether or not to reset device formats as well
+ */
 bool reset_all_devices(bool hard_reset)
 {
     DWORD res = WaitForSingleObject(audio_router_mutex, INFINITE);

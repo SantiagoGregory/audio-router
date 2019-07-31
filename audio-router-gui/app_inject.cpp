@@ -28,13 +28,15 @@
  */
 #define SESSION_GUID_BEGIN /*8*/ 5
 
-DWORD app_inject::session_guid = 1 << SESSION_GUID_BEGIN; /**> Value of session_guid */
+DWORD app_inject::session_guid = 1 << SESSION_GUID_BEGIN; /**< Value of session_guid */
 
-/** \brief get_session_guid_and_flag
- * Returns DWORD with incremented Session guid and a bool.
- * @return Make_Session_guid_and_flag Incremented value of session_guid and Conditional Statement if Duplicate is true then 2 else 1.
+/** Returns DWORD with incremented Session guid and a bool.
+ * @param duplicate whether or not to duplicate
+ * \return Make_Session_guid_and_flag Incremented value of session_guid and Conditional Statement if Duplicate is true then 2 else 1.
  */
-DWORD app_inject::get_session_guid_and_flag(bool duplicate, bool saved_routing)
+DWORD app_inject::get_session_guid_and_flag(bool duplicate
+// , bool saved_routing <- unnecessary parameter
+    )
 {
     return MAKE_SESSION_GUID_AND_FLAG(session_guid++, duplicate ? 2 : 1);
 
@@ -48,111 +50,107 @@ DWORD app_inject::get_session_guid_and_flag(bool duplicate, bool saved_routing)
     // }
 }
 
-/** A constructor
+/** Empty constructor
  */
 app_inject::app_inject()
 {
 }
 
-/** Function definition of a Static Member.
- * clear_devices: Releases the present devices and clears the list.
- * @param devices: Call by Reference i.e The static devices list is refrenced to its original location. 
+/** Releases the present devices and clears the list.
+ * @param devices reference of devices list
  */
 void app_inject::clear_devices(devices_t &devices)
 {
     for (size_t i = 0; i < devices.size(); i++)
-    { /**> Traverse through all the devices */
+    { /**< Traverse through all the devices */
         if (devices[i] != NULL)
-        { /**> If Devices are present then it gets released */
+        { /**< If Devices are present then it gets released */
             devices[i]->Release();
         }
     }
     Member Function
-        devices.clear(); /**> The list is cleared after traversing through */
+        devices.clear(); /**< The list is cleared after traversing through */
 }
 
-/** Function definition of Static Member Function
- * get_devices
- * 
+/** Releases devices
+ * @devices_t reference to devices list
  */
 void app_inject::get_devices(devices_t &devices)
 {
-    clear_devices(devices); /**> Calling Member function clear_devices */
+    clear_devices(devices); /**< Calling Member function clear_devices */
 
-    IMMDeviceEnumerator *pEnumerator; /**> Pointer Variable of type IMMDeviceEnumerator */
-    IMMDeviceCollection *pDevices;    /**> Pointer Variable of type IMMDeviceCollection */
+    IMMDeviceEnumerator *pEnumerator; /**< Pointer Variable of type IMMDeviceEnumerator */
+    IMMDeviceCollection *pDevices;    /**< Pointer Variable of type IMMDeviceCollection */
 
-    if (CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER, /**> ... */
+    if (CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER, /**< ... */
                          __uuidof(IMMDeviceEnumerator), (void **)&pEnumerator) != S_OK)
     {
-        SAFE_RELEASE(pEnumerator); /**> If true then calling SAFE_RELEASE with pEnumerator */
+        SAFE_RELEASE(pEnumerator); /**< If true then calling SAFE_RELEASE with pEnumerator */
         return;
     }
 
     if (pEnumerator->EnumAudioEndpoints(eRender, DEVICE_STATE_ACTIVE, &pDevices) != S_OK)
-    {                           /**> ... */
-        SAFE_RELEASE(pDevices); /**> If true then calling SAFE_RELAESE with pDevices */
-        pEnumerator->Release(); /**> pEnumerator Releases */
+    {                           /**< ... */
+        SAFE_RELEASE(pDevices); /**< If true then calling SAFE_RELAESE with pDevices */
+        pEnumerator->Release(); /**< pEnumerator Releases */
         return;
     }
-    pEnumerator->Release(); /**> pEnumerator Releases */
+    pEnumerator->Release(); /**< pEnumerator Releases */
 
-    UINT count; /**> Local Variable for Count */
+    UINT count; /**< Local Variable for Count */
     if (pDevices->GetCount(&count) != S_OK)
-    {                        /**> If count is under the requirements ... */
-        pDevices->Release(); /**> pDevices Releases */
+    {                        /**< If count is under the requirements ... */
+        pDevices->Release(); /**< pDevices Releases */
         return;
     }
 
-    IMMDevice *pEndpoint = NULL; /**> Pointer variable of type IMMDevice intialised with value NULL */
+    IMMDevice *pEndpoint = NULL; /**< Pointer variable of type IMMDevice intialised with value NULL */
     for (ULONG i = 0; i < count; i++)
-    {                                  /**> Loop Traverse count number of times */
-        pDevices->Item(i, &pEndpoint); /**> Access the Items in pDevices */
-        devices.push_back(pEndpoint);  /**> Pushes the pEndPoint in devices */
+    {                                  /**< Loop Traverse count number of times */
+        pDevices->Item(i, &pEndpoint); /**< Access the Items in pDevices */
+        devices.push_back(pEndpoint);  /**< Pushes the pEndPoint in devices */
     }
 
-    pDevices->Release(); /**> pDevices Releases */
+    pDevices->Release(); /**< pDevices Releases */
 } // get_devices
 
 /**
- * Function definition of Member Function
- * populate_devicelist ...
+ * Populates or repopulates device list
  */
 void app_inject::populate_devicelist()
 {
-    this->device_names.clear(); /**> Clearing device_names */
+    this->device_names.clear(); /**< Clearing device_names */
 
-    devices_t devices;          /**> Variable devices of type devices_t */
-    this->get_devices(devices); /**> Calling get_devices paasing argument is devices*/
+    devices_t devices;          /**< Variable devices of type devices_t */
+    this->get_devices(devices); /**< Calling get_devices paasing argument is devices*/
 
-    IMMDevice *pEndpoint = NULL; /**> Pointer variable pEndpoint intialised as NULL*/
+    IMMDevice *pEndpoint = NULL; /**< Pointer variable pEndpoint intialised as NULL*/
 
     for (size_t i = 0; i < devices.size(); i++)
-    {                           /**> Traverse for all the devices */
-        IPropertyStore *pProps; /**> Pointer variable pProps of type IPropertyStore */
-        LPWSTR pwszID;          /**> Local Variable pwszID of type LPWSTR  */
-        pEndpoint = devices[i]; /**> Variable is assigned each device every traverse to the pEndpoint   */
+    {                           /**< Traverse for all the devices */
+        IPropertyStore *pProps; /**< Pointer variable pProps of type IPropertyStore */
+        LPWSTR pwszID;          /**< Local Variable pwszID of type LPWSTR  */
+        pEndpoint = devices[i]; /**< Variable is assigned each device every traverse to the pEndpoint   */
 
-        pEndpoint->GetId(&pwszID); /**> Get the endpoint ID string. */
+        pEndpoint->GetId(&pwszID); /**< Get the endpoint ID string. */
         pEndpoint->OpenPropertyStore(STGM_READ, &pProps);
-        PROPVARIANT varName; /**> Local Variable varname of type PROPVARIANT */
+        PROPVARIANT varName; /**< Local Variable varname of type PROPVARIANT */
 
-        PropVariantInit(&varName); /**> Initialize container for property value. */
+        PropVariantInit(&varName); /**< Initialize container for property value. */
 
-        pProps->GetValue(PKEY_Device_FriendlyName, &varName); /**> Get the endpoint's friendly-name property. */
+        pProps->GetValue(PKEY_Device_FriendlyName, &varName); /**< Get the endpoint's friendly-name property. */
 
-        this->device_names.push_back(varName.pwszVal); /**> Pushes ProVariants to Device Names */
+        this->device_names.push_back(varName.pwszVal); /**< Pushes ProVariants to Device Names */
 
         CoTaskMemFree(pwszID);
         PropVariantClear(&varName);
         pProps->Release();
     }
 
-    this->clear_devices(devices); /**> Calling clear_devices */
+    this->clear_devices(devices); /**< Calling clear_devices */
 }
 
-/** Function definition of Member function inject.
- * inject: createprocessw lpcommandline must not be const literal.
+/** 
  * @param process_id: It's type is DWORD and Id of the process.
  * @param x86: It's type is bool and results true if the system is of "x86" specification.
  * @param device_index: It's type is size_t() and Index of device.
@@ -161,24 +159,24 @@ void app_inject::populate_devicelist()
  */
 void app_inject::inject(DWORD process_id, bool x86, size_t device_index, flush_t flush, bool duplicate)
 {
-    IMMDevice *pEndpoint = NULL; /**> Pointer Variable pEndpoint of type IMMDevice */
-    LPWSTR pwszID = NULL;        /**> Local Variable pwszID of type LPWSTR intiaslized value is NULL */
+    IMMDevice *pEndpoint = NULL; /**< Pointer Variable pEndpoint of type IMMDevice */
+    LPWSTR pwszID = NULL;        /**< Local Variable pwszID of type LPWSTR intiaslized value is NULL */
 
-    global_routing_params routing_params; /**> Declaring routing_params*/
+    global_routing_params routing_params; /**< Declaring routing_params*/
 
     routing_params.version = 0;
     routing_params.module_name_ptr = routing_params.next_global_ptr = NULL;
     routing_params.local.pid = process_id;
 
     if (device_index > 0)
-    { /**> set routing params */
+    { /**< set routing params */
         devices_t devices;
         this->get_devices(devices);
 
-        pEndpoint = devices[device_index - 1]; /**> Initializes interprocess arguments for routing audio to new device */
+        pEndpoint = devices[device_index - 1]; /**< Initializes interprocess arguments for routing audio to new device */
         pEndpoint->GetId(&pwszID);
 
-        this->clear_devices(devices); /**> Calling clear_devices */
+        this->clear_devices(devices); /**< Calling clear_devices */
 
         routing_params.local.session_guid_and_flag = get_session_guid_and_flag(duplicate);
         routing_params.local.device_id_ptr = (uint64_t)pwszID;
@@ -189,8 +187,8 @@ void app_inject::inject(DWORD process_id, bool x86, size_t device_index, flush_t
          * Initializes interprocess arguments for routing audio to default device
          * (acts as deloading the audio routing functionality)
          */
-        routing_params.local.session_guid_and_flag = 0; /**> unload dll flag */
-        // MAKE_SESSION_GUID_AND_FLAG(session_guid++, 0); /**> unload dll flag*/
+        routing_params.local.session_guid_and_flag = 0; /**< unload dll flag */
+        // MAKE_SESSION_GUID_AND_FLAG(session_guid++, 0); /**< unload dll flag*/
         routing_params.local.device_id_ptr = NULL;
     }
 
@@ -201,40 +199,40 @@ void app_inject::inject(DWORD process_id, bool x86, size_t device_index, flush_t
                                     global_size(&routing_params), L"Local\\audio-router-file"));
 
     if (hfile == NULL || (pwszID && *pwszID == NULL))
-    { /**> ... */
+    { /**< ... */
         CoTaskMemFree(pwszID);
         throw_errormessage(GetLastError());
     }
 
-    unsigned char *buffer = (unsigned char *)MapViewOfFile(hfile, FILE_MAP_ALL_ACCESS, 0, 0, 0); /**>  */
+    unsigned char *buffer = (unsigned char *)MapViewOfFile(hfile, FILE_MAP_ALL_ACCESS, 0, 0, 0); /**<  */
 
     if (buffer == NULL)
-    { /**> ... */
+    { /**< ... */
         CoTaskMemFree(pwszID);
         throw_errormessage(GetLastError());
     }
 
-    serialize(&routing_params, buffer); /**> Calling serialize */
+    serialize(&routing_params, buffer); /**< Calling serialize */
 
     UnmapViewOfFile(buffer);
     CoTaskMemFree(pwszID);
 
     if (pEndpoint != NULL || device_index == 0)
-    { /**> Check for pEndpoint Existence or if device index is zero */
+    { /**< Check for pEndpoint Existence or if device index is zero */
         try
         {
-            this->inject_dll(process_id, x86); /**> try and catch */
+            this->inject_dll(process_id, x86); /**< try and catch */
         }
         catch (std::wstring err)
         {
             throw err;
         }
         if (flush == SOFT)
-        { /**> if flush is SOFT then reset_all_devices is sent with false argument */
+        { /**< if flush is SOFT then reset_all_devices is sent with false argument */
             reset_all_devices(false);
         }
         else if (flush == HARD && !reset_all_devices(true))
-        { /**> Check the condition */
+        { /**< Check the condition */
             throw std::wstring(L"Stream flush in target process failed.\n");
         }
 
